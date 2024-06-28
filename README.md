@@ -9,7 +9,7 @@ An example would be an HTTP Request to an external API, or a localStorage in you
 ## Notes:
 
 - There are 2 arguments in useEffect() hook. First is the side effect function, second is a dependecy
-- If you put an empty array [] in the second argument of useEffect() hook. It will only execute the side effect function after component is done. Which is after the JSX code has been returned
+- If you put an empty array [] in the second argument of useEffect() hook. It will only execute the side effect function after component is done
 
 ```javascript
 useEffect(() => {
@@ -37,3 +37,4 @@ useEffect(() => {
 - **Do not use useEffect() hook inside a component function!** You can only use this hook inside a Component, but not inside the Component's functions. Or in other words, they must only be used in the root level of your Component function
 
 - Do not overuse useEffect() hook, it will cause some performance issues. Remember, this is an extra execution cycle. Not all side effects require the usage of useEffect() because using it unnecessarily is a bad practice.
+- Remember that useEffect will run after the component has finished execution, which is after the JSX code has been returned
