@@ -7,10 +7,20 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import { sortPlacesByDistance } from './loc.js';
 
+// We put this code here outside so that it doesn't re-run when App component re-renders
+// We did not put this side effect to a useEffect() hook because this is a synchronous code
+// Which means, it runs the code line by line and we get the result right away
+// And we don't need to wait for some data to proceed with other code instructions
+const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+const storedPlaces = storedIds.map((id) =>
+  // Loops all the places (AVAILABLE PLACES) and an match if each place id is equal to the current `storedIds` arrqy
+  AVAILABLE_PLACES.find((place) => place.id === id)
+);
+
 function App() {
   const modal = useRef();
   const selectedPlace = useRef();
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
 
   /**
    * useEffect() has 2 arguments:
@@ -45,7 +55,7 @@ function App() {
       return [place, ...prevPickedPlaces];
     });
 
-    const storedIds = JSON.parse(localStorage.get('selectedPlaces')) || [];
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
 
     if (storedIds.indexOf(id) === -1) {
       // -1 means nothing is found
@@ -61,6 +71,13 @@ function App() {
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
     modal.current.close();
+
+    const storedIds = JSON.parse(localStorage.getItem('selectedPlaces'));
+
+    localStorage.setItem(
+      'selectedPlaces',
+      JSON.stringify(storedIds.filter((id) => id !== selectedPlace.current))
+    );
   }
 
   return (
