@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Places from './components/Places.jsx';
 import { AVAILABLE_PLACES } from './data.js';
@@ -69,7 +69,13 @@ function App() {
     }
   }
 
-  function handleRemovePlace() {
+  /**
+   * useCallback() hook - returns a value,  function which you wrapped.
+   * So with useCallback, React makes sure that this inner-function is not recreated.
+   * Instead, it stores it internally in memory and reuses that stored function whenever the component function executes again.
+   **/
+
+  const handleRemovePlace = useCallback(function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
@@ -82,7 +88,7 @@ function App() {
       'selectedPlaces',
       JSON.stringify(storedIds.filter((id) => id !== selectedPlace.current))
     );
-  }
+  }, []);
 
   return (
     <>
