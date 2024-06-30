@@ -1,11 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+const MAX_TIME = 3000;
 
 export default function DeleteConfirmation({ onConfirm, onCancel }) {
+  const [remainingTime, setRemainingTime] = useState(MAX_TIME);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRemainingTime((prevTime) => prevTime - 10);
+    }, 10);
+
+    // Cleanup function
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onConfirm();
-    }, 3000);
+    }, MAX_TIME);
 
+    // Cleanup function: we need to clear the setTimeout() to fix infinite loop
     return () => {
       clearTimeout(timer);
     };
@@ -23,6 +39,7 @@ export default function DeleteConfirmation({ onConfirm, onCancel }) {
           Yes
         </button>
       </div>
+      <progress value={remainingTime} max={MAX_TIME} />
     </div>
   );
 }
